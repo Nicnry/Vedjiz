@@ -1,0 +1,63 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Vedjiz</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <div class="head">
+    <img center src="{{ product.picture }}" />
+    <h3>{{ product.name }}</h3>
+  </div>
+
+  <form [formGroup]="productForm">
+    <ion-item>
+      <ion-label >Prix</ion-label>
+      <ion-input formControlName="price" type="number" step="0.10" [readonly]="!dataProvider.isAdmin"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label >Low Stock</ion-label>
+      <ion-input formControlName="low_stock_threshold" type="number"[readonly]="!dataProvider.isAdmin"></ion-input>
+    </ion-item>
+  
+    <ion-item>
+      <ion-label >Unité</ion-label>
+      <ion-input formControlName="unit" type="text" [readonly]="!dataProvider.isAdmin"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label >Stock</ion-label>
+      <ion-input formControlName="stock" type="text" [readonly]="!dataProvider.isAdmin"></ion-input>
+    </ion-item>
+  </form>
+  <div *ngIf="productForm.dirty">
+    <button *ngIf="dataProvider.isAdmin" ion-button (click)="save()">Save</button>
+    <button ion-button (click)="cancel()">Cancel</button>
+  </div>
+  <h4>Fournisseur</h4>
+  <ion-list *ngIf="product.suppliers.length > 0">
+    <ion-item *ngFor="let supplier of product.suppliers" (click)="openSupplier(supplier)">
+      {{ supplier.firstName }} {{ supplier.lastName }} de {{ supplier.companyName }}
+    </ion-item>
+  </ion-list>
+  <p *ngIf="product.suppliers.length == 0">Aucun fournisseur</p>
+  <div *ngIf="dataProvider.isAdmin && product.suppliers.length > 0">
+    <button ion-button (click)="order()">Commander</button>
+    <div *ngIf="showForm">
+      <ion-icon name="remove-circle" (click)="removeQuantity()"></ion-icon>
+      <ion-icon name="add-circle" (click)="addQuantity()"></ion-icon>
+      <ion-item>
+        <ion-input [(ngModel)]="quantity" type="number"></ion-input>
+      </ion-item>
+      <ion-item>
+          <ion-select [(ngModel)]="supplierToOrder">
+              <ion-option  *ngFor="let supplier of product.suppliers" value="{{ supplier.companyName }}">{{ supplier.companyName }}</ion-option>
+         </ion-select>
+        </ion-item>
+    </div>
+  </div>
+</ion-content>
