@@ -171,4 +171,9 @@ export class DataProvider {
       this.isAdmin = false
     }
   }
+
+  // Delete an order
+  deleteCommand(order) {
+    return this.httpClient.post(`${this.endpoint}withdraw`, {'orderid': order.id}).toPromise()
+  }
 }
