@@ -24,6 +24,11 @@ export class DataProvider {
 
   constructor(private storage: Storage, private httpClient: HttpClient) {
     this.setStatus()
+    this.updateCommands().then(data =>{
+      console.log(data)
+    }).catch(error =>{
+      console.log(error)
+    })
   }
 
   public getCommandFromApi() {
@@ -43,8 +48,8 @@ export class DataProvider {
     })
   }
 
-  updateCommands(changes) {
-    return this.httpClient.patch(`http://vedjserver.mycpnv.ch/api/v1/order`, {changes: changes}).toPromise()
+  updateCommands() {
+    return this.httpClient.post(`http://vedjserver.mycpnv.ch/api/v1/order`, {productid: "1", providerid: "1", placedby: "tutu", quantity: "1"}).toPromise()
   }
 
   setUser() {
