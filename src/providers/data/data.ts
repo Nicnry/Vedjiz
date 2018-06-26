@@ -43,6 +43,10 @@ export class DataProvider {
     })
   }
 
+  updateCommands(changes) {
+    return this.httpClient.patch(`http://vedjserver.mycpnv.ch/api/v1/order`, {changes: changes}).toPromise()
+  }
+
   setUser() {
     return this.storage.set('user', 'pascal')
   }

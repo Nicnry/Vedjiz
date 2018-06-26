@@ -30,7 +30,7 @@ export class ProductPage {
   }
 
   saveNewValue() {
-
+    this.newToast()
   }
 
   cancelNewValue() {
@@ -66,6 +66,14 @@ export class ProductPage {
   presentToast() {
     let toast = this.toastCtrl.create({
       message: 'Vous devez enregistrer ou annuler les modifications en cours.',
+      duration: 3000,
+    });
+
+    toast.present()
+  }
+  newToast() {
+    let toast = this.toastCtrl.create({
+      message: "Erreur lors de l'envois",
       duration: 3000,
     });
 

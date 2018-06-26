@@ -2,6 +2,7 @@ import { User } from './../../models/user';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Storage } from '@ionic/storage';
 
 /**
  * Generated class for the MePage page.
@@ -20,18 +21,7 @@ export class MePage {
   user: User
   userForm: FormGroup
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private formBuilder: FormBuilder) {
-    this.initForm()
-  }
-
-
-  initForm() {
-    this.userForm = this.formBuilder.group({
-      firstName: [this.user.firstName],
-      lastName: [this.user.lastName],
-      phone: [this.user.phone],
-      address: [this.user.address]
-    });
+  constructor(public navCtrl: NavController, public navParams: NavParams,private storage: Storage) {
   }
 
   ionViewDidLoad() {
