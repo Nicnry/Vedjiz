@@ -20,9 +20,20 @@ export class ProductPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, private formBuilder: FormBuilder, private toastCtrl: ToastController, private dataProvider: DataProvider) {
     this.product = navParams.get('product')
     this.initForm()
+    if (this.product.stock < this.product.low_stock_threshold){
+      this.quantity = 0
+    }
   }
 
   cancel() {
+    this.initForm()
+  }
+
+  saveNewValue() {
+
+  }
+
+  cancelNewValue() {
     this.initForm()
   }
 
@@ -70,7 +81,11 @@ export class ProductPage {
 
   // Add quantity
   addQuantity() {
-    if (this.quantity < this.product.stock ) {
+    this.quantity++
+  }
+
+  addQuantityUser() {
+    if (this.quantity < this.product.stock-this.product.low_stock_threshold) {
       this.quantity++
     }
   }

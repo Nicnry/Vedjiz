@@ -15,5 +15,10 @@
 
 
 <ion-content padding>
-hello
+    <ion-list>
+        <ion-item *ngFor="let order of dataProvider.orders">
+          <h2 class="text"> {{order.productName}} {{order.quantity}} {{order.companyName}} Par {{order.placed_by}}</h2>
+        </ion-item>
+      </ion-list>
+    
 </ion-content>

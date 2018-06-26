@@ -1,3 +1,6 @@
+import { HttpClient } from '@angular/common/http';
+import { Order } from './../../models/order';
+import { DataProvider } from './../../providers/data/data';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
@@ -15,7 +18,9 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class CommandesPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  orders: Array<Order> = []
+
+  constructor(public navCtrl: NavController, private dataProvider: DataProvider,public navParams: NavParams, private httpClient: HttpClient) {
   }
 
   ionViewDidLoad() {

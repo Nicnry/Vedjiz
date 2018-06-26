@@ -45,8 +45,27 @@
     </ion-item>
   </ion-list>
   <p *ngIf="product.suppliers.length == 0">Aucun fournisseur</p>
-  <div *ngIf="dataProvider.isAdmin && product.suppliers.length > 0">
+
+  <!-- Command for common user -->
+  <div *ngIf="!dataProvider.isAdmin">
     <button ion-button (click)="order()">Commander</button>
+    <div *ngIf="showForm">
+      <ion-icon *ngIf="product.stock > product.low_stock_threshold" name="remove-circle" (click)="removeQuantity()"></ion-icon>
+      <ion-icon *ngIf="product.stock > product.low_stock_threshold" name="add-circle" (click)="addQuantityUser()"></ion-icon>
+      <ion-item>
+        <ion-input [(ngModel)]="quantity" type="number" [readonly]="product.stock < product.low_stock_threshold"></ion-input>
+      </ion-item>
+      <div>
+        <button *ngIf="!dataProvider.isAdmin" ion-button (click)="saveNewValue()">Save</button>
+        <button ion-button (click)="cancelNewValue()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Command of new stock -->
+  <div *ngIf="dataProvider.isAdmin && product.suppliers.length > 0">
+    <button ion-button (click)="order()">Commander (Admin)</button>
     <div *ngIf="showForm">
       <ion-icon name="remove-circle" (click)="removeQuantity()"></ion-icon>
       <ion-icon name="add-circle" (click)="addQuantity()"></ion-icon>
@@ -56,7 +75,7 @@
       <ion-item>
           <ion-select [(ngModel)]="supplierToOrder">
               <ion-option  *ngFor="let supplier of product.suppliers" value="{{ supplier.companyName }}">{{ supplier.companyName }}</ion-option>
-         </ion-select>
+          </ion-select>
         </ion-item>
     </div>
   </div>

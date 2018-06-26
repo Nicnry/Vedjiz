@@ -1,3 +1,4 @@
+import { Order } from './../../models/order';
 import { Injectable } from '@angular/core';
 import { Product } from '../../models/product';
 import 'rxjs/add/operator/map'
@@ -15,12 +16,39 @@ import { Supplier } from '../../models/supplier';
 export class DataProvider {
 
   private endpoint: string = `http://vedjserver.mycpnv.ch/api/v1/`
+  user: string
   products: Array<Product> = []
+  orders: Array<Order> = []
   status: string
   isAdmin: boolean
 
   constructor(private storage: Storage, private httpClient: HttpClient) {
     this.setStatus()
+  }
+
+  public getCommandFromApi() {
+    let orders: Array<Order> = []
+    return new Promise<Array<Order>>((resolve, reject) => {
+      this.httpClient.get(`http://vedjserver.mycpnv.ch/api/v1/orders`)
+      .subscribe(data => {
+        Object.keys(data).forEach(key => {
+          orders.push(new Order(data[key].id, data[key].productName, data[key].quantity, data[key].companyName, data[key].placed_by))
+        })
+        resolve(orders)
+        console.log(orders)
+      },
+      error => {
+        reject(error)
+      })
+    })
+  }
+
+  setUser() {
+    return this.storage.set('user', 'pascal')
+  }
+
+  async getUser() {
+    this.user = await this.storage.get('user')
   }
 
   async getProducts() {
@@ -42,7 +70,6 @@ export class DataProvider {
             suppliers.push(new Supplier(0, supplier.firstName, supplier.lastName, '', '', supplier.companyName))
           })
           products.push(new Product(data[key].id, data[key].productName, data[key].price, data[key].unit, data[key].stock,data[key].low_stock_threshold, data[key].image64, suppliers))
-          console.log(products)
         })
         resolve(products)
       },
@@ -80,6 +107,7 @@ export class DataProvider {
   async updateLocal() {
       await this.clear()
       this.products = await this.getProductsFromApi()
+      this.orders = await this.getCommandFromApi()
       await this.setProducts()
       
       let lastUpdateApi = await this.getLastUpdateFromApi()
